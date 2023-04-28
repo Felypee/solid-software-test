@@ -7,6 +7,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
+      with:
+        ref: make-the-test
           
       - name: Check file existence
         id: check_files
