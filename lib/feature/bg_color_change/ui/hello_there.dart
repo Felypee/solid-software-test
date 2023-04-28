@@ -46,7 +46,7 @@ class _HelloThereState extends State<HelloThere> {
   final random = math.Random();
 
   //Luminance limit
-  final double luminanceLimit = 0.7;
+  final double luminanceLimit = 0.5;
 
   //padding percentage
   ///width 5% left-right
@@ -76,16 +76,16 @@ class _HelloThereState extends State<HelloThere> {
     // Calculate the luminance of the new color to determine whether the
     // text color should be black or white
     final luminance = (0.299 * newColor.red +
-                0.587 * newColor.green +
-                0.114 * newColor.blue) /
-            colorCodeLimit -
-        1;
+            0.587 * newColor.green +
+            0.114 * newColor.blue) /
+        colorCodeLimit;
     // Update the state variables to reflect the new background color and
     // text color
 
     _bgColor = newColor;
     // If the luminance is greater than 0.5 (i.e., the color is light),
     // use black text; otherwise, use white text
+    debugPrint("Luminance $luminance");
     _textColor = luminance > luminanceLimit ? Colors.black : Colors.white;
     //Generate the color for the illustration
     _illustrationColor = Color.fromARGB(
