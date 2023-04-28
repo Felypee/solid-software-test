@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'package:solid_software_test/feature/bg_color_change/utils/message_list.dart';
 import 'package:lottie/lottie.dart';
+import 'package:solid_software_test/feature/bg_color_change/utils/message_list.dart';
 
 ///
 class HelloThere extends StatefulWidget {
@@ -33,6 +33,9 @@ class _HelloThereState extends State<HelloThere> {
   Color _textColor = Colors.white;
   Color _illustrationColor = Colors.blue;
 
+  //Color code bits limit
+  int colorCodeLimit = 256;
+
   ///Phrase text size
   final double _textSize = 30.0;
 
@@ -41,6 +44,16 @@ class _HelloThereState extends State<HelloThere> {
 
   ///Create random instance
   final random = math.Random();
+
+  //Luminance limit
+  final double luminanceLimit = 0.7;
+
+  //padding percentage
+  ///width 5% left-right
+  final double widthPercentage = 0.05;
+
+  ///height 20% top-bottom
+  final double heigthPercentage = 0.2;
 
   @override
   void initState() {
@@ -51,10 +64,11 @@ class _HelloThereState extends State<HelloThere> {
   }
 
   void _changeColor() {
-    // Generate three random integers between 0 and 255 to represent the RGB values
-    final r = random.nextInt(256);
-    final g = random.nextInt(256);
-    final b = random.nextInt(256);
+    // Generate three random integers between 0 and 255 to represent
+    // the RGB values
+    final r = random.nextInt(colorCodeLimit);
+    final g = random.nextInt(colorCodeLimit);
+    final b = random.nextInt(colorCodeLimit);
 
     // Use the RGB values to create a new Color object with 100% opacity
     //(alpha value of 255)
@@ -62,22 +76,23 @@ class _HelloThereState extends State<HelloThere> {
     // Calculate the luminance of the new color to determine whether the
     // text color should be black or white
     final luminance = (0.299 * newColor.red +
-            0.587 * newColor.green +
-            0.114 * newColor.blue) /
-        255;
+                0.587 * newColor.green +
+                0.114 * newColor.blue) /
+            colorCodeLimit -
+        1;
     // Update the state variables to reflect the new background color and
     // text color
 
     _bgColor = newColor;
     // If the luminance is greater than 0.5 (i.e., the color is light),
     // use black text; otherwise, use white text
-    _textColor = luminance > 0.7 ? Colors.black : Colors.white;
+    _textColor = luminance > luminanceLimit ? Colors.black : Colors.white;
     //Generate the color for the illustration
     _illustrationColor = Color.fromARGB(
-      255,
-      random.nextInt(256),
-      random.nextInt(256),
-      random.nextInt(256),
+      colorCodeLimit - 1,
+      random.nextInt(colorCodeLimit),
+      random.nextInt(colorCodeLimit),
+      random.nextInt(colorCodeLimit),
     );
   }
 
@@ -108,7 +123,9 @@ class _HelloThereState extends State<HelloThere> {
               width: size.width,
               height: size.height,
               padding: EdgeInsets.symmetric(
-                  horizontal: size.width * 0.05, vertical: size.height * 0.2),
+                horizontal: size.width * widthPercentage,
+                vertical: size.height * heigthPercentage,
+              ),
               duration: const Duration(milliseconds: 500),
               color: _bgColor,
             ),

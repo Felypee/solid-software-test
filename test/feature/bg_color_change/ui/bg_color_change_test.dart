@@ -1,12 +1,10 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:solid_software_test/feature/bg_color_change/ui/hello_there.dart';
 import 'package:solid_software_test/feature/bg_color_change/utils/message_list.dart';
 
 void main() {
-  Widget rootWidget = MaterialApp(
+  final Widget rootWidget = MaterialApp(
     title: 'Solid Software test',
     theme: ThemeData(),
     home: const HelloThere(),
@@ -31,7 +29,7 @@ void main() {
           find.byWidgetPredicate((widget) => widget is AnimatedContainer);
       final decoration =
           tester.widget<AnimatedContainer>(containerFinder).decoration;
-      final bgColor = (decoration as BoxDecoration).color;
+      final bgColor = (decoration as BoxDecoration?)?.color;
 
       expect(bgColor, isNot(initialColor));
     });
@@ -69,7 +67,7 @@ void main() {
           find.byWidgetPredicate((widget) => widget is AnimatedContainer);
       final decoration =
           tester.widget<AnimatedContainer>(containerFinder).decoration;
-      final initialColor = (decoration as BoxDecoration).color;
+      final initialColor = (decoration as BoxDecoration?)?.color;
 
       // Tap the screen to change the color
       await tester.tap(find.byType(GestureDetector));
@@ -80,21 +78,30 @@ void main() {
           find.byWidgetPredicate((widget) => widget is AnimatedContainer);
       final newDecoration =
           tester.widget<AnimatedContainer>(newContainerFinder).decoration;
-      final newColor = (newDecoration as BoxDecoration).color;
+      Color? newColor = (newDecoration as BoxDecoration?)?.color;
+      const double redUmbral = 0.299;
+      const double greenUmbral = 0.299;
+      const double blueUmbral = 0.299;
+      const double colorBitsLimit = 255;
+      const double luminanceLimit = 0.7;
 
       // Get the new text color based on luminance
-      final newTextColor = (0.299 * newColor!.red +
-                      0.587 * newColor!.green +
-                      0.114 * newColor!.blue) /
-                  255 >
-              0.5
-          ? Colors.black
-          : Colors.white;
+      newColor = newColor != null
+          ? (redUmbral * newColor.red +
+                          greenUmbral * newColor.green +
+                          blueUmbral * newColor.blue) /
+                      colorBitsLimit >
+                  luminanceLimit
+              ? Colors.black
+              : Colors.white
+          : initialColor;
 
       // Verify that the color has changed and the text color is correct
       expect(newColor, isNot(initialColor));
       expect(
-          (tester.widget<Text>(find.byType(Text))).style!.color, newTextColor);
+        (tester.widget<Text>(find.byType(Text))).style?.color,
+        newColor,
+      );
     });
   });
 }
