@@ -86,15 +86,15 @@ void main() {
       const double luminanceLimit = 0.7;
 
       // Get the new text color based on luminance
-      newColor = newColor != null
-          ? (redUmbral * newColor.red +
-                          greenUmbral * newColor.green +
-                          blueUmbral * newColor.blue) /
-                      colorBitsLimit >
-                  luminanceLimit
-              ? Colors.black
-              : Colors.white
-          : initialColor;
+      if (newColor != null) {
+        newColor = (redUmbral * newColor.red +
+                        greenUmbral * newColor.green +
+                        blueUmbral * newColor.blue) /
+                    colorBitsLimit >
+                luminanceLimit
+            ? Colors.black
+            : Colors.white;
+      }
 
       // Verify that the color has changed and the text color is correct
       expect(newColor, isNot(initialColor));
