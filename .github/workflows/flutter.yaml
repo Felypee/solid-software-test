@@ -6,8 +6,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      
+      - uses: actions/checkout@v1
           
       - name: Check file existence
         id: check_files
@@ -37,8 +36,7 @@ jobs:
         if: steps.check_files.outputs.files_exists == 'true'
         run: |
           dirs_to_analyse=""
-          if [ -d lib/feature/bg_color_change/ui ]; then dirs_to_analyse+=" lib/feature/bg_color_change/ui"; fi
-          if [ -d lib/feature/bg_color_change/utils ]; then dirs_to_analyse+=" lib/feature/bg_color_change/utils"; fi
+          if [ -d lib ]; then dirs_to_analyse+=" lib"; fi
           if [ -d test ]; then dirs_to_analyse+=" test"; fi
 
           if [ dirs_to_analyse != "" ]
