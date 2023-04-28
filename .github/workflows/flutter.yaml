@@ -3,7 +3,7 @@ on: [push, pull_request]
 
 jobs:
   code-check:
-    - uses: my-check: ./.github/workflows/flutter.yaml
+    - uses: ./.github/workflows/flutter.yaml
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
